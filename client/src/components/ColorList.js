@@ -11,8 +11,6 @@ const ColorList = ({ colors, updateColors }) => {
   console.log(colors);
   const [editing, setEditing] = useState(false);
   const [colorToEdit, setColorToEdit] = useState(initialColor);
-  const history = useHistory();
-  const [addColors, setAddColors] = useState(initialColor);
   const editColor = color => {
     setEditing(true);
     setColorToEdit(color);
@@ -45,10 +43,15 @@ const ColorList = ({ colors, updateColors }) => {
     axiosWithAuth()
       .delete(`/api/colors/${color.id}`)
       .then((res) => {
-        // history.push('/bubblepage')
+        axiosWithAuth()
+          .get(`/api/colors`)
+          .then((res) => {
+            updateColors(res.data); 
       })
+    })
       .catch((err) => console.log(err));
-  };
+  }
+  
 
   return (
     <div className="colors-wrap">
